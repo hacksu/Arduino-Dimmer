@@ -20,19 +20,47 @@ Let’s take a break to explain how electricity works in a circuit. People like 
 
 LED stands for light emitting diode. The first two words make sense. It emits light, but diode may not be familiar to you. It refers to an LED's electronic characteristic. It's special because like all diodes it will only let electricity through in one direction. On an LED the positive end is marked by being longer.
 
-So to make our circuit we will hook up the a wire from the 5V pin to our breadboard like this:
+1. So to make our circuit we will hook up the a wire from the 5V pin to our breadboard.
+2. Now we need to hook up the negative side of the circuit. 3. We’ll hook up the ground pin to the - row on the top.
+4. Let’s add the resistor. Connect the resistor between the - row and a column, let’s do the one right next to the positive lead.
+5. Finally let’s put the LED in and watch it light up. Make sure to put the longer end in the positive column.
 
-![Photo](https://lh3.googleusercontent.com/1QvwbbI7iZubcW7OOQ7iaUdHZSqC1kw8yhmH0HgEqIm8uEJ5JThdbkKq667p-CMbh13xAijloIVKP6xySTmFbIakcHk2Qq3njOUKR8dS8cM5nU6RMIBTk-pnXMu60BdJMHjG9ZxpzZeisJTsQwkHqGMAe4fOZ5azwVQiBT9UsQT32NU7lQyWuWylOBP86D79VEXcG_ySUHhM6y2ZQQ88S0ENDP1jN32CZRai_587tCISN0z7rBSdmI2WQ-aRhQaEAAkRktrydmMkp4f18q_0TFyMO0Bkn6RvJnY-xC3i7meHy11ACP9wZLNTxGVwase3kMFiVpmc9RvJ8stY7I9VDle0ZPze-TywnfBRkrYLoz96-vgtPhYptxCx2aHaOktjhZhf6MBOLR1VGOYHpuotLeqbbEZnOmY7HLV4IkcNll9GwnR9CKwW7DDDnNnJLY2EuwAL63YrUbPdj8e19xrnmdk6BVM0u3DAqT_IgQERfdTzJN-f1_QBV5y7XWaPpGSV0a3pu-FfbCJ3mRptN-NpZ2laFo2of1hkQ6p4twu2RKwMU6H9wsz_3_9wVRRLUXGXgikvcQ=w1264-h935-no)
+![LedWiring](https://github.com/hacksu/Arduino-Dimmer/blob/master/imgs/Screenshot-2018-1-26%20Autodesk%20Circuits(1).png?raw=true)
 
-Now we need to hook up the negative side of the circuit. We’ll hook up the ground pin to the - row on the top. Like this:
+## Controlling the Brightness
 
-![Image](https://photos.google.com/share/AF1QipMBcczeYxiYsCME0iJaTzvbHGqMD8_pH914NMUlqfpzltCaO6E5RhdVxQ6scOQH0w/photo/AF1QipNUX85B_U9C0BCpg8fJfPDOvGPaJ2_4xfz-tFkJ?key=ZVNzbEZsVllJVElsVUt1OFk5TGE5dFBsOTJiX3hB)
+### Wire up the button
+![ButtonWiring](https://github.com/hacksu/Arduino-Dimmer/blob/master/imgs/Screenshot-2018-1-26%20Autodesk%20Circuits.png?raw=true)
 
+### Install the Arduino IDE
+[Arduino IDE Download](https://www.arduino.cc/en/Main/Software)
 
-Let’s add the resistor. Connect the resistor between the - row and a column, let’s do the one right next to the positive lead.
+### Writing the Code
+``` cpp
+bool last = LOW;
+int light = 0;
 
-![example](https://lh3.googleusercontent.com/yg_OnrsiWH_L67u_fgSLXUZH7JRr-A_aK7gCOBv9V4ojFNNHSlqCbWJt8IbwJs7uAh4G5GHqAIQ-QIKw1ZSTRQhyNe6PTDIrXJ1Dugmb6hGXEHQAdBqVm3_Jj2CdICwGRdnboNyPiqTKt5VDs3ruASkW4Be7QDJqXlj_6WKmBKMBdLewH3HPTlb9m7YU8i5luqL1YjH3rh0IDmPNVfF3QELz1bxvdMC4L0hatL3usG2GBTo-te32hfdzGuo-fKtqWU_1LElsEy-c6kLBcjKL81bM49cToGAl2iz9WPdGLaGa3VrqlT4bATeMzR6yKixEf8I3xzddoQgyS8MFEPoHdjlBzJxIXJvgybm0kHUjHXciP6R_pGs9H8Ii5AepfWhb9u18e7MXkSFTUuDiI47gNZpC6Nm-uejif0rSrvhYmnQX5toyfK329T_gFgMi-61prhkGTfrj41-Ki8GgmVFH9uxJvzV1QlwmCGwaahQAVQpte3423a2Cqm0QFTQKRvxBCzeZjzteo-l6ckvhd8nPIL8EWssw2PTgR_eZRF86bBS-pscouqVIZgcpfBYYpIWFykaLjQ=w1264-h935-no)
+void setup() {
+    // set up pin inputs
+    pinMode(12, INPUT);
+    pinMode(11, OUTPUT);
+}
 
-Finally let’s put the LED in and watch it light up. Make sure to put the longer end in the positive column.
+void loop() {
+    bool current = digitalRead(12);
+    if (current != last) {
+        light += 16;
+    }
+    analogWrite(11, light);
+    last = current;
+}
+```
 
-![LIGHT](https://lh3.googleusercontent.com/T-H7JXGB-w49C78Fs69HOroq_Igdj29HSK06fmSt-oQ0fr6Kh52wdbH7NY6OkHM1B6rFVdkp219iUa3WdhJjWl7eid2-_yMGLLfy83OZN_3L1aGSWgHqFBtj6FDPtBvFY0jHfh0aBahCuVo9GboKPXIGCzAZlrRoH0dIqzlF8M8lU7SxYRD2x9RFePqSlB8Qf_cq4rsx3JyeX7SfrR2Y6QsieI_9dGvUc1rHn58-_iXLmSyUdzFnnlL2oYFRIjw719ukXJR7HpMsB95nqISxOTQt4JLxcWtwrHQAMLMnMirPg_eVBG7fTEwFVQkmaPmblqKYvtKUIKZxLkhhSJhfNeBOCFQE1jrIFdmVC43oR1lBCnlTRDE28ZdsvhUC3CcEUL344l4_lQoVrighFRPCG6augh2vgwpMr0fzIsO4yJwBRDM7W3Y4bKpXNOtlP772B3PdbtDAGny1GWu3K7e_0fA7HXVTIKsO7m6mnAg9c-CRRLnc1X_U4LLY6b1Jr6iPyLEAKJqXmFw-r7uPtBNohEtj7QnJhbppe29a0svcN8me9LIAIK3HRPdtnBnf8zXEamMilg=w1264-h935-no)
+### Select your Board
+![BoardType](https://github.com/hacksu/Arduino-Dimmer/blob/master/imgs/Screenshot_20180126_191816.png?raw=true)
+
+### Select the Port
+![Port](https://github.com/hacksu/Arduino-Dimmer/blob/master/imgs/Screenshot_20180126_192002(1).png?raw=true)
+
+### Run 
+![RunButton](https://github.com/hacksu/Arduino-Dimmer/blob/master/imgs/Screenshot_20180126_192952(3).png?raw=true)
